@@ -48,8 +48,8 @@ If auto-detection is not suitable, pass either or both locations explicitly:
 
 ```powershell
 ./setup.ps1 `
-    -ValheimPath 'D:\SteamLibrary\steamapps\common\Valheim' `
-    -BepInExPath 'D:\Games\Valheim\BepInEx\core'
+    -ValheimPath 'X:\SteamLibrary\steamapps\common\Valheim' `
+    -BepInExPath 'X:\Games\Valheim\BepInEx\core'
 ```
 
 `-BepInExPath` may point to the BepInEx `core` directory, the `BepInEx` directory, a mod-manager profile, or the Valheim directory.
