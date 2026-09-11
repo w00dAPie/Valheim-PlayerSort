@@ -1,0 +1,26 @@
+# Build output
+bin/
+obj/
+dist/
+release/
+
+# Local build dependencies populated by setup.ps1
+libs/
+*.dll
+*.pdb
+*.deps.json
+
+# IDE and user-specific files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+Directory.Build.props.user
+
+# Generated packages
+*.zip
+
+# OS metadata
+Thumbs.db
+.DS_Store

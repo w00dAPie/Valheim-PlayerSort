@@ -1,0 +1,126 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>PlayerSort</AssemblyName>
+    <RootNamespace>PlayerSort</RootNamespace>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <Deterministic>true</Deterministic>
+    <MSBuildWarningsAsMessages>$(MSBuildWarningsAsMessages);MSB3277</MSBuildWarningsAsMessages>
+    <BuildDependenciesPath>$(MSBuildProjectDirectory)/libs</BuildDependenciesPath>
+    <ThunderstoreSourcePath>$(MSBuildProjectDirectory)/thunderstore</ThunderstoreSourcePath>
+    <ThunderstorePackageDirectory>$(MSBuildProjectDirectory)/dist/PlayerSort</ThunderstorePackageDirectory>
+    <ThunderstorePackagePath>$(MSBuildProjectDirectory)/dist/PlayerSort-$(Version).zip</ThunderstorePackagePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(BuildDependenciesPath)/BepInEx.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="assembly_valheim">
+      <HintPath>$(BuildDependenciesPath)/assembly_valheim.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="assembly_utils">
+      <HintPath>$(BuildDependenciesPath)/assembly_utils.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine">
+      <HintPath>$(BuildDependenciesPath)/UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(BuildDependenciesPath)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(BuildDependenciesPath)/UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(BuildDependenciesPath)/Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ThunderstorePackageFile Include="$(ThunderstoreSourcePath)/manifest.json">
+      <PackagePath>manifest.json</PackagePath>
+    </ThunderstorePackageFile>
+    <ThunderstorePackageFile Include="$(ThunderstoreSourcePath)/README.md">
+      <PackagePath>README.md</PackagePath>
+    </ThunderstorePackageFile>
+    <ThunderstorePackageFile Include="$(ThunderstoreSourcePath)/CHANGELOG.md">
+      <PackagePath>CHANGELOG.md</PackagePath>
+    </ThunderstorePackageFile>
+    <ThunderstorePackageFile Include="$(ThunderstoreSourcePath)/icon.png">
+      <PackagePath>icon.png</PackagePath>
+    </ThunderstorePackageFile>
+    <ThunderstorePackageFile Include="$(MSBuildProjectDirectory)/LICENSE">
+      <PackagePath>LICENSE</PackagePath>
+    </ThunderstorePackageFile>
+  </ItemGroup>
+
+  <Target Name="ValidateBuildDependencies" BeforeTargets="ResolveReferences">
+    <Error
+      Condition="!Exists('$(BuildDependenciesPath)/BepInEx.dll')"
+      Text="Build dependencies are missing. Run ./setup.ps1 first."
+    />
+    <Error
+      Condition="!Exists('$(BuildDependenciesPath)/assembly_valheim.dll')"
+      Text="Build dependencies are missing. Run ./setup.ps1 first."
+    />
+    <Error
+      Condition="!Exists('$(BuildDependenciesPath)/assembly_utils.dll')"
+      Text="Build dependencies are missing. Run ./setup.ps1 first."
+    />
+    <Error
+      Condition="!Exists('$(BuildDependenciesPath)/UnityEngine.dll')"
+      Text="Build dependencies are missing. Run ./setup.ps1 first."
+    />
+    <Error
+      Condition="!Exists('$(BuildDependenciesPath)/UnityEngine.CoreModule.dll')"
+      Text="Build dependencies are missing. Run ./setup.ps1 first."
+    />
+    <Error
+      Condition="!Exists('$(BuildDependenciesPath)/UnityEngine.UI.dll')"
+      Text="Build dependencies are missing. Run ./setup.ps1 first."
+    />
+    <Error
+      Condition="!Exists('$(BuildDependenciesPath)/Unity.TextMeshPro.dll')"
+      Text="Build dependencies are missing. Run ./setup.ps1 first."
+    />
+  </Target>
+
+  <Target Name="PackageThunderstore" DependsOnTargets="Build">
+    <RemoveDir Directories="$(ThunderstorePackageDirectory)" />
+    <MakeDir Directories="$(ThunderstorePackageDirectory)/plugins" />
+    <Copy
+      SourceFiles="@(ThunderstorePackageFile)"
+      DestinationFiles="@(ThunderstorePackageFile->'$(ThunderstorePackageDirectory)/%(PackagePath)')"
+    />
+    <Copy
+      SourceFiles="$(TargetPath)"
+      DestinationFiles="$(ThunderstorePackageDirectory)/plugins/PlayerSort.dll"
+    />
+    <Delete Files="$(ThunderstorePackagePath)" />
+    <ZipDirectory
+      SourceDirectory="$(ThunderstorePackageDirectory)"
+      DestinationFile="$(ThunderstorePackagePath)"
+      Overwrite="true"
+    />
+    <Message Importance="high" Text="Thunderstore package: $(ThunderstorePackagePath)" />
+  </Target>
+
+</Project>

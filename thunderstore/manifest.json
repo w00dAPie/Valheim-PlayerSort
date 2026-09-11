@@ -1,0 +1,9 @@
+{
+  "name": "PlayerSort",
+  "version_number": "1.0.0",
+  "website_url": "",
+  "description": "Client-side inventory sorting for Valheim that leaves the hotbar and separate gear or quick slots untouched.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2350"
+  ]
+}
