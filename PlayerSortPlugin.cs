@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using BepInEx;
 using TMPro;
 using UnityEngine;
@@ -14,6 +15,21 @@ namespace PlayerSort
         public const string PluginGuid = "w00ds.valheim.playersort";
         public const string PluginName = "PlayerSort";
         public const string PluginVersion = "1.0.0";
+
+        private static readonly MethodInfo InventoryChangedMethod =
+            typeof(Inventory).GetMethod(
+                "Changed",
+                BindingFlags.Instance |
+                BindingFlags.Public |
+                BindingFlags.NonPublic,
+                null,
+                new[]
+                {
+                    typeof(bool),
+                    typeof(bool)
+                },
+                null
+            );
 
         private GameObject _sortButtonObject;
         private float _nextUiCheck;
@@ -419,6 +435,9 @@ namespace PlayerSort
                     }
                 }
 
+                NotifyInventoryChanged(
+                    inventory
+                );
                 Logger.LogInfo(
                     $"Sorted {sortedItems.Count} player inventory items"
                 );
@@ -429,6 +448,30 @@ namespace PlayerSort
                     $"Inventory sorting failed: {ex}"
                 );
             }
+        }
+
+        private void NotifyInventoryChanged(
+            Inventory inventory
+        )
+        {
+            if (InventoryChangedMethod == null)
+            {
+                Logger.LogWarning(
+                    "Inventory.Changed(bool, bool) was not found; " +
+                    "the inventory UI may not refresh immediately"
+                );
+
+                return;
+            }
+
+            InventoryChangedMethod.Invoke(
+                inventory,
+                new object[]
+                {
+                    false,
+                    false
+                }
+            );
         }
 
         private static int GetSortCategory(
