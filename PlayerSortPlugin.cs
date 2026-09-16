@@ -14,7 +14,7 @@ namespace PlayerSort
     {
         public const string PluginGuid = "w00ds.valheim.playersort";
         public const string PluginName = "PlayerSort";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.1";
 
         private static readonly MethodInfo InventoryChangedMethod =
             typeof(Inventory).GetMethod(
@@ -438,6 +438,7 @@ namespace PlayerSort
                 NotifyInventoryChanged(
                     inventory
                 );
+
                 Logger.LogInfo(
                     $"Sorted {sortedItems.Count} player inventory items"
                 );
