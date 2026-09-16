@@ -1,6 +1,6 @@
 {
   "name": "PlayerSort",
-  "version_number": "1.0.0",
+  "version_number": "1.0.1",
   "website_url": "https://github.com/w00dAPie/Valheim-PlayerSort",
   "description": "Client-side inventory sorting for Valheim that leaves the hotbar and separate gear or quick slots untouched.",
   "dependencies": [
